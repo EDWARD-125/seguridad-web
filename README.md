@@ -56,9 +56,18 @@ seguridad-web/
 3. Inicia MongoDB localmente
 
 ### Ejecutar
+En diferentes terminales:
+
+**Terminal 1 — MongoDB:**
 ```bash
 cd backend
-npm start
+mongod
+```
+
+**Terminal 2 — Backend:**
+```bash
+cd backend
+npm run dev
 ```
 
 ### Rutas principales
@@ -74,6 +83,7 @@ npm start
 ## Frontend
 
 ### Ejecutar
+**Terminal 3 — Frontend:**
 ```bash
 cd frontend
 npm install

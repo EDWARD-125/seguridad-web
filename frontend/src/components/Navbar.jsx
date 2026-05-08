@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const links = [
   { path: '/', label: '🏠 Inicio' },
@@ -10,13 +11,12 @@ const links = [
   { path: '/tecnicas', label: 'Técnicas' },
   { path: '/buscar', label: '🔎 Buscar' },
   { path: '/nuevo', label: '➕ Nuevo' },
-  { path: '/login', label: '🔑 Login' },
 ];
 
 function Navbar() {
   const location = useLocation();
-  const [abierto, setAbierto] = useState(false);
-
+  const { usuario, logout, estaAutenticado } = useAuth();
+  const [abierto, setAbierto] = useState(false); 
   return (
     <nav style={{
       background: '#12122a',
@@ -61,6 +61,29 @@ function Navbar() {
               {link.label}
             </Link>
           ))}
+          
+          {estaAutenticado ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginLeft: 'auto' }}>
+              <span style={{ color: '#60a5fa', fontSize: '0.85rem' }}>
+                👤 {usuario?.nombre}
+              </span>
+              <button onClick={logout} style={{
+                background: 'transparent', border: '1px solid #f87171',
+                color: '#f87171', padding: '0.3rem 0.8rem',
+                borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem'
+              }}>
+                Cerrar sesión
+              </button>
+            </div>
+          ) : (
+            <Link to="/login" style={{
+              color: '#60a5fa', textDecoration: 'none',
+              border: '1px solid #60a5fa', padding: '0.3rem 0.8rem',
+              borderRadius: '6px', fontSize: '0.85rem', marginLeft: 'auto'
+            }}>
+              🔑 Login
+            </Link>
+          )}
         </div>
 
         {/* Botón hamburguesa en móvil */}
@@ -105,6 +128,32 @@ function Navbar() {
               {link.label}
             </Link>
           ))}
+          
+          {estaAutenticado ? (
+            <>
+              <span style={{ color: '#60a5fa', fontSize: '0.85rem', padding: '0.75rem 0', borderBottom: '1px solid #1e1e3a' }}>
+                👤 {usuario?.nombre}
+              </span>
+              <button onClick={() => { logout(); setAbierto(false); }} style={{
+                background: 'transparent', border: 'none',
+                color: '#f87171', padding: '0.75rem 0',
+                cursor: 'pointer', fontSize: '0.85rem',
+                textAlign: 'left',
+                borderBottom: '1px solid #1e1e3a'
+              }}>
+                Cerrar sesión
+              </button>
+            </>
+          ) : (
+            <Link to="/login" onClick={() => setAbierto(false)} style={{
+              color: '#60a5fa', textDecoration: 'none',
+              padding: '0.75rem 0',
+              fontSize: '0.85rem',
+              borderBottom: '1px solid #1e1e3a'
+            }}>
+              🔑 Login
+            </Link>
+          )}
         </div>
       )}
 

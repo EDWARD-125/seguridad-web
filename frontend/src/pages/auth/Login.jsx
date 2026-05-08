@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 // ── Typing effect ─────────────────────────────────────────────────
 const lineasCodigo = [
@@ -387,18 +388,38 @@ const redesSociales = [
 // ── Formulario de login ───────────────────────────────────────────
 function FormularioLogin() {
   const navigate = useNavigate();
+  const { login, registro } = useAuth();
   const [modo, setModo] = useState('login');
   const [form, setForm] = useState({ email: '', password: '', nombre: '' });
+  const [error, setError] = useState('');
   const [escaneando, setEscaneando] = useState(false);
   const [exito, setExito] = useState(false);
-  const [error, setError] = useState('');
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = () => {
-    if (!form.email || !form.password) { setError('Completa todos los campos.'); return; }
-    setError(''); setEscaneando(true);
-    setTimeout(() => { setExito(true); setTimeout(() => navigate('/'), 1500); }, 2000);
+  const handleSubmit = async () => {
+    if (!form.email || !form.password) {
+      setError('Completa todos los campos.');
+      return;
+    }
+    if (modo === 'registro' && !form.nombre) {
+      setError('El nombre es obligatorio.');
+      return;
+    }
+    setError('');
+    setEscaneando(true);
+    try {
+      if (modo === 'login') {
+        await login(form.email, form.password);
+      } else {
+        await registro(form.nombre, form.email, form.password);
+      }
+      setExito(true);
+      setTimeout(() => navigate('/'), 1500);
+    } catch (err) {
+      setError(err.response?.data?.mensaje || 'Error al autenticar.');
+      setEscaneando(false);
+    }
   };
 
   const inputStyle = {

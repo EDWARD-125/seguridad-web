@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getTemas, getTemasPorCategoria, crearTema, getTemaById, editarTema, eliminarTema } = require('../../controllers/temasController');
+const { getTemas, getTemasPorCategoria, crearTema, getTemaById, editarTema, eliminarTema } = require('../controllers/temasController');
 
 router.get('/', getTemas);
 router.get('/categoria/:categoria', getTemasPorCategoria);

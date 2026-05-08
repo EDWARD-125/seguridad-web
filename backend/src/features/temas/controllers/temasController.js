@@ -1,4 +1,4 @@
-const Tema = require('../models/Tema');
+const Tema = require('../../../models/Tema');
 
 // Obtener todos los temas
 const getTemas = async (req, res) => {
