@@ -8,6 +8,20 @@ export function AuthProvider({ children }) {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tokenOAuth = params.get('token');
+    const usuarioOAuth = params.get('usuario');
+
+    if (tokenOAuth && usuarioOAuth) {
+      const usuarioParseado = JSON.parse(usuarioOAuth);
+      localStorage.setItem('token', tokenOAuth);
+      localStorage.setItem('usuario', JSON.stringify(usuarioParseado));
+      setUsuario(usuarioParseado);
+      window.history.replaceState({}, document.title, window.location.pathname);
+      setCargando(false);
+      return;
+    }
+
     const usuarioGuardado = localStorage.getItem('usuario');
     const token = localStorage.getItem('token');
     if (usuarioGuardado && token) {

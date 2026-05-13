@@ -30,8 +30,8 @@ function Home() {
         {temas.map((t) => (
           <Link key={t.path} to={t.path} style={{ textDecoration: 'none' }}>
             <div style={{
-              background: '#1a1a2e',
-              border: '1px solid #2a2a4a',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
               borderRadius: '12px',
               padding: '1.5rem',
               cursor: 'pointer',
@@ -40,16 +40,16 @@ function Home() {
             }}
             onMouseEnter={e => {
               e.currentTarget.style.transform = 'translateY(-5px)';
-              e.currentTarget.style.borderColor = '#60a5fa';
+              e.currentTarget.style.borderColor = 'var(--accent)';
             }}
             onMouseLeave={e => {
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = '#2a2a4a';
+              e.currentTarget.style.borderColor = 'var(--border)';
             }}
             >
               <div style={{ fontSize: '2rem', marginBottom: '0.8rem' }}>{t.icono}</div>
-              <h3 style={{ color: '#ffffff', marginBottom: '0.5rem', fontSize: '1rem' }}>{t.nombre}</h3>
-              <p style={{ fontSize: '0.85rem', color: '#7070a0', margin: 0 }}>{t.desc}</p>
+              <h3 style={{ color: 'var(--text-strong)', marginBottom: '0.5rem', fontSize: '1rem' }}>{t.nombre}</h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-soft)', margin: 0 }}>{t.desc}</p>
             </div>
           </Link>
         ))}
@@ -57,7 +57,7 @@ function Home() {
 
       {/* Carrusel */}
       <div style={{ marginTop: '4rem' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#ffffff' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: 'var(--text-strong)' }}>
           🛡️ Seguridad en el mundo digital
         </h2>
         <Carrusel />

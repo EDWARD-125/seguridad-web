@@ -42,7 +42,10 @@ const demosPorTema = {
 function DemoInteractiva({ titulo }) {
   const [texto, setTexto] = useState('');
   const [expandido, setExpandido] = useState(false);
-  const demo = demosPorTema[titulo];
+  const tituloNormalizado = titulo.toLowerCase();
+  const demo = demosPorTema[titulo]
+    || (tituloNormalizado.includes('asimetrico') ? demosPorTema['Cifrado AsimÃ©trico'] : null)
+    || (tituloNormalizado.includes('simetrico') ? demosPorTema['Cifrado SimÃ©trico'] : null);
 
   if (!demo) return null;
 
@@ -55,8 +58,8 @@ function DemoInteractiva({ titulo }) {
         onClick={(e) => { e.stopPropagation(); setExpandido(!expandido); }}
         style={{
           background: 'transparent',
-          border: '1px solid #3a3a5a',
-          color: '#60a5fa',
+          border: '1px solid var(--border)',
+          color: 'var(--accent)',
           padding: '0.3rem 0.8rem',
           borderRadius: '6px',
           cursor: 'pointer',
@@ -72,7 +75,7 @@ function DemoInteractiva({ titulo }) {
           onClick={e => e.stopPropagation()}
           style={{
             marginTop: '0.8rem',
-            background: '#0f0f1a',
+            background: 'var(--surface-3)',
             borderRadius: '8px',
             padding: '0.8rem',
             fontSize: '0.8rem'
@@ -80,7 +83,7 @@ function DemoInteractiva({ titulo }) {
         >
           {demo.tipo === 'cifrado' && (
             <>
-              <p style={{ color: '#a0a0c0', marginBottom: '0.5rem' }}>{demo.descripcionDemo}</p>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '0.5rem' }}>{demo.descripcionDemo}</p>
               <input
                 value={texto}
                 onChange={e => setTexto(e.target.value)}
@@ -88,10 +91,10 @@ function DemoInteractiva({ titulo }) {
                 style={{
                   width: '100%',
                   padding: '0.4rem 0.6rem',
-                  background: '#1a1a2e',
-                  border: '1px solid #2a2a4a',
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
                   borderRadius: '6px',
-                  color: '#e0e0e0',
+                  color: 'var(--text)',
                   fontSize: '0.8rem',
                   marginBottom: '0.5rem',
                   boxSizing: 'border-box'
@@ -99,8 +102,8 @@ function DemoInteractiva({ titulo }) {
               />
               {texto && (
                 <div>
-                  <span style={{ color: '#7070a0' }}>Cifrado: </span>
-                  <span style={{ color: '#60a5fa', fontFamily: 'monospace' }}>
+                  <span style={{ color: 'var(--text-soft)' }}>Cifrado: </span>
+                  <span style={{ color: 'var(--accent)', fontFamily: 'monospace' }}>
                     {cifrarSimple(texto)}
                   </span>
                 </div>
@@ -125,15 +128,15 @@ function DemoInteractiva({ titulo }) {
 
           {demo.tipo === 'jwt' && (
             <div>
-              <p style={{ color: '#a0a0c0', marginBottom: '0.4rem' }}>Ejemplo de token JWT:</p>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '0.4rem' }}>Ejemplo de token JWT:</p>
               <div style={{ fontFamily: 'monospace', fontSize: '0.72rem', wordBreak: 'break-all' }}>
                 <span style={{ color: '#f87171' }}>eyJhbGciOiJIUzI1NiJ9</span>.
-                <span style={{ color: '#60a5fa' }}>eyJ1c2VyIjoiZWR3YXIifQ</span>.
+                <span style={{ color: 'var(--accent)' }}>eyJ1c2VyIjoiZWR3YXIifQ</span>.
                 <span style={{ color: '#4ade80' }}>xK9s2f</span>
               </div>
-              <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: '#7070a0' }}>
+              <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--text-soft)' }}>
                 <span style={{ color: '#f87171' }}>■</span> Header &nbsp;
-                <span style={{ color: '#60a5fa' }}>■</span> Payload &nbsp;
+                <span style={{ color: 'var(--accent)' }}>■</span> Payload &nbsp;
                 <span style={{ color: '#4ade80' }}>■</span> Firma
               </div>
             </div>
@@ -169,13 +172,13 @@ function DemoInteractiva({ titulo }) {
           {demo.tipo === 'codigo' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               <div>
-                <span style={{ color: '#7070a0', fontSize: '0.75rem' }}>Ataque: </span>
+                <span style={{ color: 'var(--text-soft)', fontSize: '0.75rem' }}>Ataque: </span>
                 <span style={{ color: '#f87171', fontFamily: 'monospace', fontSize: '0.75rem' }}>
                   {demo.malo}
                 </span>
               </div>
               <div>
-                <span style={{ color: '#7070a0', fontSize: '0.75rem' }}>Defensa: </span>
+                <span style={{ color: 'var(--text-soft)', fontSize: '0.75rem' }}>Defensa: </span>
                 <span style={{ color: '#4ade80', fontFamily: 'monospace', fontSize: '0.75rem' }}>
                   {demo.bueno}
                 </span>
@@ -195,8 +198,8 @@ function TarjetaTema({ titulo, descripcion, id }) {
     <div
       onClick={() => navigate(`/tema/${id}`)}
       style={{
-        background: '#1a1a2e',
-        border: '1px solid #2a2a4a',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
         borderRadius: '10px',
         padding: '1.2rem',
         margin: '0.5rem',
@@ -206,15 +209,15 @@ function TarjetaTema({ titulo, descripcion, id }) {
       }}
       onMouseEnter={e => {
         e.currentTarget.style.transform = 'translateY(-4px)';
-        e.currentTarget.style.borderColor = '#60a5fa';
+        e.currentTarget.style.borderColor = 'var(--accent)';
       }}
       onMouseLeave={e => {
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.borderColor = '#2a2a4a';
+        e.currentTarget.style.borderColor = 'var(--border)';
       }}
     >
-      <h3 style={{ color: '#60a5fa', marginBottom: '0.5rem', fontSize: '1rem' }}>{titulo}</h3>
-      <p style={{ fontSize: '0.85rem', color: '#9090a8', margin: 0, lineHeight: '1.5' }}>
+      <h3 style={{ color: 'var(--accent)', marginBottom: '0.5rem', fontSize: '1rem' }}>{titulo}</h3>
+      <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0, lineHeight: '1.5' }}>
         {descripcion}
       </p>
       <DemoInteractiva titulo={titulo} />
@@ -223,3 +226,4 @@ function TarjetaTema({ titulo, descripcion, id }) {
 }
 
 export default TarjetaTema;
+

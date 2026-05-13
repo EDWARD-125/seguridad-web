@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE_URL } from '../../api';
 
 // ── Typing effect ─────────────────────────────────────────────────
 const lineasCodigo = [
@@ -388,14 +389,32 @@ const redesSociales = [
 // ── Formulario de login ───────────────────────────────────────────
 function FormularioLogin() {
   const navigate = useNavigate();
-  const { login, registro } = useAuth();
+  const { login, registro, estaAutenticado } = useAuth();
   const [modo, setModo] = useState('login');
   const [form, setForm] = useState({ email: '', password: '', nombre: '' });
   const [error, setError] = useState('');
   const [escaneando, setEscaneando] = useState(false);
   const [exito, setExito] = useState(false);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthError = params.get('oauthError');
+    if (oauthError) {
+      setError(`No se pudo iniciar con proveedor externo: ${oauthError}`);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (estaAutenticado) navigate('/');
+  }, [estaAutenticado, navigate]);
+
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSocialLogin = (proveedor) => {
+    setError('');
+    window.location.href = `${API_BASE_URL}/auth/${proveedor.toLowerCase()}`;
+  };
 
   const handleSubmit = async () => {
     if (!form.email || !form.password) {
@@ -506,6 +525,7 @@ function FormularioLogin() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 gap: '0.4rem', fontSize: '0.8rem', transition: 'all 0.2s'
               }}
+                onClick={() => handleSocialLogin(red.nombre)}
                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
               >

@@ -57,10 +57,10 @@ function Buscador() {
           style={{
             flex: 1,
             padding: '0.75rem 1rem',
-            background: '#12122a',
-            border: '1px solid #2a2a4a',
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
             borderRadius: '8px',
-            color: '#e0e0e0',
+            color: 'var(--text)',
             fontSize: '1rem',
             outline: 'none'
           }}
@@ -86,18 +86,18 @@ function Buscador() {
 
       {buscado && !cargando && (
         <>
-          <p style={{ marginBottom: '1rem', color: '#7070a0', fontSize: '0.9rem' }}>
+          <p style={{ marginBottom: '1rem', color: 'var(--text-soft)', fontSize: '0.9rem' }}>
             {resultados.length} resultado{resultados.length !== 1 ? 's' : ''} para "{query}"
           </p>
 
           {resultados.length === 0 ? (
             <div style={{
-              background: '#1a1a2e',
-              border: '1px solid #2a2a4a',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
               borderRadius: '12px',
               padding: '2rem',
               textAlign: 'center',
-              color: '#7070a0'
+              color: 'var(--text-soft)'
             }}>
               No se encontraron temas. Intenta con otra palabra.
             </div>
@@ -108,8 +108,8 @@ function Buscador() {
                   key={t._id}
                   onClick={() => navigate(`/tema/${t._id}`)}
                   style={{
-                    background: '#1a1a2e',
-                    border: '1px solid #2a2a4a',
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
                     borderRadius: '12px',
                     padding: '1.2rem 1.5rem',
                     cursor: 'pointer',
@@ -119,11 +119,11 @@ function Buscador() {
                     gap: '1rem'
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = '#60a5fa';
+                    e.currentTarget.style.borderColor = 'var(--accent)';
                     e.currentTarget.style.transform = 'translateX(4px)';
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = '#2a2a4a';
+                    e.currentTarget.style.borderColor = 'var(--border)';
                     e.currentTarget.style.transform = 'translateX(0)';
                   }}
                 >
@@ -131,18 +131,18 @@ function Buscador() {
                     {categoriaIconos[t.categoria] || '📄'}
                   </span>
                   <div>
-                    <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '0.3rem' }}>
+                    <h3 style={{ color: 'var(--text-strong)', fontSize: '1rem', marginBottom: '0.3rem' }}>
                       {t.titulo}
                     </h3>
-                    <p style={{ fontSize: '0.85rem', color: '#7070a0', margin: 0 }}>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-soft)', margin: 0 }}>
                       {t.descripcion}
                     </p>
                   </div>
                   <span style={{
                     marginLeft: 'auto',
-                    background: '#12122a',
-                    border: '1px solid #2a2a4a',
-                    color: '#60a5fa',
+                    background: 'var(--surface-3)',
+                    border: '1px solid var(--border)',
+                    color: 'var(--accent)',
                     padding: '0.2rem 0.7rem',
                     borderRadius: '20px',
                     fontSize: '0.75rem',

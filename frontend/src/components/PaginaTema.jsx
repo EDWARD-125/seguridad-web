@@ -38,8 +38,8 @@ function PaginaTema({ titulo, icono, descripcion, descripcionLateral, puntos, te
         alignItems: 'start'
       }}>
         <div style={{
-          background: '#1a1a2e',
-          border: '1px solid #2a2a4a',
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '2rem'
         }}>
@@ -50,8 +50,8 @@ function PaginaTema({ titulo, icono, descripcion, descripcionLateral, puntos, te
 
         {descripcionLateral && (
           <div style={{
-            background: '#12122a',
-            border: '1px solid #2a2a4a',
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
             borderRadius: '16px',
             padding: '1.5rem',
             display: 'flex',
@@ -59,7 +59,7 @@ function PaginaTema({ titulo, icono, descripcion, descripcionLateral, puntos, te
             gap: '1rem'
           }}>
             <h3 style={{
-              color: '#60a5fa',
+              color: 'var(--accent)',
               fontSize: '0.85rem',
               textTransform: 'uppercase',
               letterSpacing: '1px',
@@ -69,11 +69,11 @@ function PaginaTema({ titulo, icono, descripcion, descripcionLateral, puntos, te
             </h3>
             {descripcionLateral.map((item, i) => (
               <div key={i} style={{
-                borderLeft: '3px solid #2a2a5a',
+                borderLeft: '3px solid var(--border)',
                 paddingLeft: '0.8rem'
               }}>
                 <p style={{
-                  color: '#a0a0c8',
+                  color: 'var(--text-muted)',
                   fontSize: '0.85rem',
                   margin: 0,
                   lineHeight: '1.6'
@@ -88,8 +88,8 @@ function PaginaTema({ titulo, icono, descripcion, descripcionLateral, puntos, te
 
       {/* Puntos clave */}
       <div style={{
-        background: '#12122a',
-        border: '1px solid #2a2a4a',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
         borderRadius: '12px',
         padding: '1.5rem',
         marginBottom: '2rem'
@@ -97,7 +97,7 @@ function PaginaTema({ titulo, icono, descripcion, descripcionLateral, puntos, te
         <h2 style={{
           marginBottom: '1rem',
           fontSize: '0.9rem',
-          color: '#60a5fa',
+          color: 'var(--accent)',
           textTransform: 'uppercase',
           letterSpacing: '1px'
         }}>
@@ -107,8 +107,8 @@ function PaginaTema({ titulo, icono, descripcion, descripcionLateral, puntos, te
           {puntos.map((punto, i) => (
             <li key={i} style={{
               padding: '0.6rem 0',
-              borderBottom: i < puntos.length - 1 ? '1px solid #1e1e3a' : 'none',
-              color: '#c0c0d8',
+              borderBottom: i < puntos.length - 1 ? '1px solid var(--border-soft)' : 'none',
+              color: 'var(--text)',
               fontSize: '0.95rem',
               lineHeight: '1.6'
             }}>

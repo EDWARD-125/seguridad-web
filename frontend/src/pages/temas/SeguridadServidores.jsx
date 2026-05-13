@@ -3,19 +3,19 @@ import axios from 'axios';
 import PaginaTema from '../../components/PaginaTema';
 
 const glosario = [
-  { palabra: 'Hardening', color: '#60a5fa', explicacion: 'Proceso de reducir la superficie de ataque de un servidor deshabilitando servicios, puertos y usuarios innecesarios.' },
-  { palabra: 'Firewall', color: '#4ade80', explicacion: 'Sistema que filtra el tráfico de red entrante y saliente según reglas definidas. Puede ser software o hardware.' },
-  { palabra: 'SSH', color: '#a78bfa', explicacion: 'Secure Shell. Protocolo cifrado para administrar servidores remotamente de forma segura.' },
-  { palabra: 'VPN', color: '#fbbf24', explicacion: 'Virtual Private Network. Crea un túnel cifrado entre el usuario y el servidor, ocultando el tráfico.' },
-  { palabra: 'DMZ', color: '#f87171', explicacion: 'Zona Desmilitarizada. Red intermedia entre internet y la red interna que aloja servicios públicos como web servers.' },
-  { palabra: 'parches', color: '#34d399', explicacion: 'Actualizaciones de software que corrigen vulnerabilidades de seguridad conocidas. Aplicarlos es crítico.' },
+  { palabra: 'Hardening', color: '#60a5fa', explicacion: 'Proceso de reducir la superficie de ataque mediante configuraciones seguras y eliminacion de lo innecesario.' },
+  { palabra: 'Firewall', color: '#4ade80', explicacion: 'Control que filtra trafico entrante y saliente segun reglas definidas.' },
+  { palabra: 'SSH', color: '#a78bfa', explicacion: 'Protocolo cifrado para administrar servidores remotamente.' },
+  { palabra: 'VPN', color: '#fbbf24', explicacion: 'Tunel cifrado para conectar usuarios o redes de forma privada.' },
+  { palabra: 'DMZ', color: '#f87171', explicacion: 'Zona separada para exponer servicios publicos sin abrir directamente la red interna.' },
+  { palabra: 'parches', color: '#34d399', explicacion: 'Actualizaciones que corrigen fallos y vulnerabilidades conocidas.' },
 ];
 
 const descripcionLateral = [
-  'El 60% de los ataques exitosos explotan vulnerabilidades con parches disponibles pero no aplicados.',
-  'Un servidor mal configurado puede ser comprometido en menos de 5 minutos si está expuesto a internet.',
-  'El principio de mínimo privilegio reduce el daño potencial si una cuenta es comprometida.',
-  'Los ataques de fuerza bruta por SSH son uno de los más comunes. Deshabilitar root login es esencial.',
+  'La seguridad de un servidor depende del software, la configuracion, los permisos y el mantenimiento continuo.',
+  'Hardening significa quitar oportunidades: menos servicios, menos puertos, menos privilegios y menos configuraciones por defecto.',
+  'El minimo privilegio limita el dano: si una cuenta cae, no deberia tener acceso a todo el sistema.',
+  'Un servidor bien protegido tambien registra eventos para investigar incidentes y responder con evidencia.',
 ];
 
 function SeguridadServidores() {
@@ -32,21 +32,21 @@ function SeguridadServidores() {
       categoria="servidores"
       icono="🖥️"
       titulo="Seguridad en Servidores"
-      descripcion="Configuración y buenas prácticas para proteger servidores."
+      descripcion="Practicas para reducir superficie de ataque, controlar accesos y mantener servicios confiables."
       descripcionLateral={descripcionLateral}
       glosario={glosario}
       puntos={[
-        'Hardening — reducir superficie de ataque deshabilitando servicios innecesarios',
-        'Firewall — filtrado de tráfico entrante y saliente',
-        'Actualizaciones — aplicar parches de seguridad regularmente',
-        'Principio de mínimo privilegio — cada proceso solo accede a lo necesario',
-        'SSH seguro — deshabilitar root, usar llaves en vez de contraseñas',
-        'DMZ — separar servicios públicos de la red interna',
-        'VPN — acceso remoto cifrado para administradores',
+        'Hardening: deshabilitar servicios innecesarios, cerrar puertos, eliminar cuentas sin uso y aplicar configuraciones seguras.',
+        'Firewall: permitir solo el trafico necesario; todo puerto abierto debe tener una razon operativa clara.',
+        'Actualizaciones: aplicar parches de seguridad para corregir vulnerabilidades conocidas antes de que sean explotadas.',
+        'Minimo privilegio: separar usuarios, roles y permisos para que una falla no comprometa todo el sistema.',
+        'SSH seguro: usar llaves, deshabilitar root remoto, limitar intentos y restringir acceso por red.',
+        'DMZ: ubicar servicios publicos en una zona separada para proteger la red interna si uno de ellos cae.',
+        'VPN: exponer administracion solo a usuarios autorizados mediante un tunel cifrado y controlado.',
       ]}
       temas={temas}
     />
   );
 }
 
-export default SeguridadServidores; 
+export default SeguridadServidores;

@@ -8,6 +8,26 @@ function FondoCircuito() {
     const ctx = canvas.getContext('2d');
     let animId;
 
+    const paletas = {
+      oscuro: {
+        linea: [96, 165, 250],
+        nodo: [96, 165, 250],
+        particulas: ['#60a5fa', '#4ade80'],
+        greebles: ['#60a5fa', '#4ade80', '#a78bfa', '#fbbf24'],
+      },
+      claro: {
+        linea: [37, 99, 235],
+        nodo: [30, 64, 175],
+        particulas: ['#1d4ed8', '#059669'],
+        greebles: ['#1d4ed8', '#059669', '#7c3aed', '#d97706'],
+      }
+    };
+
+    const obtenerPaleta = () => {
+      const tema = document.documentElement.dataset.theme === 'claro' ? 'claro' : 'oscuro';
+      return paletas[tema];
+    };
+
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -40,7 +60,7 @@ function FondoCircuito() {
       nodoDestino: Math.floor(Math.random() * NODOS),
       progreso: Math.random(),
       velocidad: Math.random() * 0.004 + 0.002,
-      colorHex: Math.random() > 0.5 ? '#60a5fa' : '#4ade80',
+      colorIndex: Math.random() > 0.5 ? 0 : 1,
       size: Math.random() * 2 + 1,
     }));
 
@@ -53,12 +73,12 @@ function FondoCircuito() {
       size: Math.random() * 12 + 6,
       opacidad: Math.random() * 0.3 + 0.1,
       pulso: Math.random() * Math.PI * 2,
-      color: ['#60a5fa', '#4ade80', '#a78bfa', '#fbbf24'][Math.floor(Math.random() * 4)],
+      colorIndex: Math.floor(Math.random() * 4),
     }));
 
-    const dibujarGreeble = (g, t) => {
+    const dibujarGreeble = (g, t, paleta) => {
       const op = g.opacidad * (0.6 + 0.4 * Math.sin(t * 0.8 + g.pulso));
-      ctx.strokeStyle = g.color;
+      ctx.strokeStyle = paleta.greebles[g.colorIndex];
       ctx.globalAlpha = op;
       ctx.lineWidth = 0.7;
 
@@ -120,6 +140,7 @@ function FondoCircuito() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       t += 0.016;
+      const paleta = obtenerPaleta();
 
       // Mover nodos
       nodos.forEach(n => {
@@ -148,14 +169,14 @@ function FondoCircuito() {
             ctx.moveTo(nodos[i].x, nodos[i].y);
             ctx.lineTo(mx, my);
             ctx.lineTo(nodos[j].x, nodos[j].y);
-            ctx.strokeStyle = `rgba(96, 165, 250, ${op})`;
+            ctx.strokeStyle = `rgba(${paleta.linea[0]}, ${paleta.linea[1]}, ${paleta.linea[2]}, ${op})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
 
             // Punto de esquina
             ctx.beginPath();
             ctx.arc(mx, my, 1.5, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(96, 165, 250, ${op * 2})`;
+            ctx.fillStyle = `rgba(${paleta.linea[0]}, ${paleta.linea[1]}, ${paleta.linea[2]}, ${op * 2})`;
             ctx.fill();
           }
         }
@@ -166,13 +187,13 @@ function FondoCircuito() {
         const pulso = 0.5 + 0.5 * Math.sin(n.pulso);
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r * (1 + pulso * 0.5), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(96, 165, 250, ${0.2 + pulso * 0.4})`;
+        ctx.fillStyle = `rgba(${paleta.nodo[0]}, ${paleta.nodo[1]}, ${paleta.nodo[2]}, ${0.2 + pulso * 0.4})`;
         ctx.fill();
 
         // Halo
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r * 3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(96, 165, 250, ${0.03 + pulso * 0.05})`;
+        ctx.fillStyle = `rgba(${paleta.nodo[0]}, ${paleta.nodo[1]}, ${paleta.nodo[2]}, ${0.03 + pulso * 0.05})`;
         ctx.fill();
       });
 
@@ -204,18 +225,18 @@ function FondoCircuito() {
         // Estela
         ctx.beginPath();
         ctx.arc(px, py, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgba(p.colorHex, 0.9);
+        ctx.fillStyle = hexToRgba(paleta.particulas[p.colorIndex], 0.9);
         ctx.fill();
 
         // Brillo
         ctx.beginPath();
         ctx.arc(px, py, p.size * 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgba(p.colorHex, 0.15);
+        ctx.fillStyle = hexToRgba(paleta.particulas[p.colorIndex], 0.15);
         ctx.fill();
       });
 
       // Dibujar greebles
-      greebles.forEach(g => dibujarGreeble(g, t));
+      greebles.forEach(g => dibujarGreeble(g, t, paleta));
 
       animId = requestAnimationFrame(draw);
     };
@@ -239,7 +260,7 @@ function FondoCircuito() {
         height: '100%',
         zIndex: 0,
         pointerEvents: 'none',
-        opacity: 0.55,
+        opacity: 'var(--canvas-opacity)',
       }}
     />
   );
