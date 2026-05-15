@@ -160,7 +160,7 @@ const redirigirConSesion = (res, usuario) => {
     usuario: JSON.stringify(usuarioSeguro)
   });
 
-  res.redirect(`${obtenerBaseFrontend()}/login?${params.toString()}`);
+  res.redirect(`${obtenerBaseFrontend()}/?${params.toString()}`);
 };
 
 // Registro
@@ -230,13 +230,32 @@ router.get('/:proveedor/callback', async (req, res, next) => {
     if (!proveedoresOAuth.includes(proveedor)) return next();
     const { code, error, state } = req.query;
 
-    if (error) return res.redirect(`${obtenerBaseFrontend()}/login?oauthError=${encodeURIComponent(error)}`);
-    if (!code) return res.redirect(`${obtenerBaseFrontend()}/login?oauthError=sin_codigo`);
+    // Diagnóstico rápido
+    console.log('[OAUTH CALLBACK]', {
+      proveedor,
+      hasCode: !!code,
+      error: error || null,
+      statePrefix: typeof state === 'string' ? state.slice(0, 12) : null
+    });
+
+    if (error) {
+      console.log('[OAUTH CALLBACK] error:', error);
+      return res.redirect(`${obtenerBaseFrontend()}/login?oauthError=${encodeURIComponent(error)}`);
+    }
+    if (!code) {
+      console.log('[OAUTH CALLBACK] sin code');
+      return res.redirect(`${obtenerBaseFrontend()}/login?oauthError=sin_codigo`);
+    }
     validarStateOAuth(proveedor, state);
 
     const tokens = await intercambiarCodigoPorToken(proveedor, code);
+    console.log('[OAUTH CALLBACK] token recibido (keys):', Object.keys(tokens || {}));
+
     const perfil = await obtenerPerfilOAuth(proveedor, tokens.access_token);
+    console.log('[OAUTH CALLBACK] perfil:', { proveedorAuth: proveedor, email: perfil?.email });
+
     const usuario = await obtenerOCrearUsuarioOAuth(proveedor, perfil);
+    console.log('[OAUTH CALLBACK] usuario listo:', { id: usuario?._id, email: usuario?.email, proveedorAuth: usuario?.proveedorAuth });
 
     redirigirConSesion(res, usuario);
   } catch (error) {

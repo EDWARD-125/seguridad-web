@@ -560,8 +560,23 @@ const contenidoTextual = {
 
 function seleccionarContenidoTextual(titulo, tema) {
   const t = titulo.toLowerCase();
-  if (t.includes('asim')) return contenidoTextual['Cifrado AsimÃƒÂ©trico'];
-  if (t.includes('sim') && t.includes('trico')) return contenidoTextual['Cifrado SimÃƒÂ©trico'];
+
+  // Soporta títulos con “mojibake” (Ã©, Ã±, etc.) y también el texto correcto.
+  if (t.includes('asim')) {
+    return (
+      contenidoTextual['Cifrado Asimétrico'] ??
+      contenidoTextual['Cifrado AsimÃ©trico'] ??
+      contenidoTextual['Cifrado AsimÃƒÂ©trico']
+    );
+  }
+  if (t.includes('sim') && t.includes('trico')) {
+    return (
+      contenidoTextual['Cifrado Simétrico'] ??
+      contenidoTextual['Cifrado SimÃ©trico'] ??
+      contenidoTextual['Cifrado SimÃƒÂ©trico']
+    );
+  }
+
   if (t.includes('https') || t.includes('tls')) return contenidoTextual['HTTPS y TLS'];
   if (t.includes('jwt')) return contenidoTextual['JWT - JSON Web Tokens'];
   if (t.includes('hardening')) return contenidoTextual['Hardening de Servidores'];
@@ -606,11 +621,12 @@ function DetalleTema() {
 
   if (cargando) return <p style={{ padding: '2rem' }}>Cargando...</p>;
   if (!tema) return <p style={{ padding: '2rem' }}>Tema no encontrado.</p>;
-  const textoTema = seleccionarContenidoTextual(tema.titulo, tema);
-  const tituloNormalizado = tema.titulo.toLowerCase();
-  const contenidoInteractivo = contenidoEspecial[tema.titulo]
-    || (tituloNormalizado.includes('asimetrico') ? contenidoEspecial['Cifrado AsimÃ©trico'] : null)
-    || (tituloNormalizado.includes('simetrico') ? contenidoEspecial['Cifrado SimÃ©trico'] : null);
+  const textoTema = seleccionarContenidoTextual(tema?.titulo ?? '', tema ?? {});
+  const tituloNormalizado = (tema?.titulo ?? '').toLowerCase();
+  const contenidoInteractivo = contenidoEspecial[tema?.titulo]
+    || (tituloNormalizado.includes('asimetrico') ? (contenidoEspecial['Cifrado Asimétrico'] ?? contenidoEspecial['Cifrado AsimÃ©trico']) : null)
+    || (tituloNormalizado.includes('simetrico') ? (contenidoEspecial['Cifrado Simétrico'] ?? contenidoEspecial['Cifrado SimÃ©trico']) : null);
+
 
   return (
     <div style={{ padding: '3rem 2rem', maxWidth: '900px', margin: '0 auto' }}>
